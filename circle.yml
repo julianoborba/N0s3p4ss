@@ -11,21 +11,21 @@ jobs:
       - checkout
       - run:
           name: Building environment
-          command: make install install_submodules install_sublist3r install_wafw00f
+          command: make install
   lint:
     <<: *environment
     steps:
       - checkout
       - run:
           name: Running linters and quality gate checkers
-          command: make lint sonar_scanner
+          command: make lint sonar_analysis
   test:
     <<: *environment
     steps:
       - checkout
       - run:
           name: Running unit tests
-          command: make unit_tests
+          command: make test
 
 
 workflows:
