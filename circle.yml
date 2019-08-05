@@ -25,7 +25,7 @@ jobs:
       - checkout
       - run:
           name: Running unit tests
-          command: python3 -m unittest
+          command: make unit_tests
 
 
 workflows:

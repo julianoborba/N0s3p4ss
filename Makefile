@@ -15,6 +15,9 @@ install_sublist3r:
 install_wafw00f:
 	(cd ./wafw00f && sudo python3 setup.py install)
 
+unit_tests:
+	python3 -m unittest discover tests
+
 lint:
 	pipenv run flake8
 	autopep8 --in-place --recursive .
