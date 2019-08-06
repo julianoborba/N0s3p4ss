@@ -19,5 +19,5 @@ test:
 	python3 -m unittest discover tests
 
 coverage:
-	pipenv run coverage run *.py
+	pipenv run coverage run -m unittest discover
 	pipenv run coverage report --fail-under=50
