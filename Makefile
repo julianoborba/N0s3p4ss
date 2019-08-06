@@ -9,7 +9,7 @@ install:
 
 lint:
 	pipenv run flake8
-	autopep8 --in-place --recursive .
+	pipenv run autopep8 --in-place --recursive .
 
 sonar_analysis:
 	SONAR_TOKEN=${SONAR_TOKEN} PROJECT_VERSION=$(git rev-parse --short HEAD)  envsubst < sonar-project.template.properties > sonar-project.properties
@@ -17,3 +17,7 @@ sonar_analysis:
 
 test:
 	python3 -m unittest discover tests
+
+coverage:
+	pipenv run coverage run *.py
+	pipenv run coverage report --fail-under=50
