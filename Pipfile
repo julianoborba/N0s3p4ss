@@ -17,6 +17,7 @@ coverage = "==4.5.4"
 pyopenssl = "==19.0.0"
 python-json-logger = "==0.1.11"
 structlog = "==19.1.0"
+python-nmap = "==0.6.1"
 
 [requires]
 python_version = "3.7"
