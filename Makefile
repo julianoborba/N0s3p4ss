@@ -16,7 +16,7 @@ sonar_analysis:
 	docker run -ti -v ~/project:/usr/src vivareal/sonar-scanner:latest
 
 test:
-	pipenv run python3 -m unittest discover tests
+	pipenv run python3 -m unittest discover tests -f
 
 coverage:
 	pipenv run coverage run --source ./ -m unittest discover

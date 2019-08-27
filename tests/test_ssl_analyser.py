@@ -1,41 +1,83 @@
 from unittest import TestCase
-from unittest.mock import patch
 from ssl_analyser import SSLSocket, \
     get_sslv23_method_context, \
-    get_ssl_connection
+    get_ssl_connection, \
+    get_peer_certificate, \
+    get_cryptography_certificate, \
+    get_certificate_issuer, \
+    get_issuer_oid_common_name, \
+    get_server_certificate, \
+    load_certificate, \
+    get_cert_issuer, \
+    get_cert_not_after_attribute, \
+    get_cert_not_valid_after_attribute
 from socket import AF_INET, SOCK_STREAM, socket
-from OpenSSL.SSL import VERIFY_NONE, Context, SSLv23_METHOD
+from OpenSSL.SSL import VERIFY_NONE
+from datetime import datetime
+from idna import decode
+from threading import Thread
+from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
+from ssl import wrap_socket
+from os.path import abspath, dirname
+
+HOST = '127.0.0.1'
+PORT = 9192
+TESTS_PATH = abspath(dirname(__file__))
+
+
+class Server(ThreadingMixIn, TCPServer):
+
+    def __enter__(self):
+        server_thread = Thread(target=self.serve_forever)
+        server_thread.daemon = False
+        server_thread.start()
+
+    # run the command below in terminal to generate a new cert if needed
+    #
+    # openssl req -x509 \
+    #     -newkey rsa:4096 \
+    #     -keyout key.pem \
+    #     -out cert.pem \
+    #     -days 365 \
+    #     -nodes \
+    #     -subj '/CN=127.0.0.1/O=Localhost Co'
+
+    def get_request(self):
+        new_socket, client_ip = TCPServer.get_request(self)
+
+        return wrap_socket(
+            new_socket,
+            keyfile=f'{TESTS_PATH}/resources/key.pem',
+            certfile=f'{TESTS_PATH}/resources/cert.pem',
+            server_side=True
+        ), client_ip
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.server_close()
+        self.shutdown()
 
 
 class SslAnalyserTest(TestCase):
 
-    @patch('socket.socket.setblocking')
-    @patch('socket.socket.connect')
-    def test_that_should_connect_ssl_socket(self, connect, setblocking):
-        new_socket = socket(AF_INET, SOCK_STREAM)
-        new_socket.settimeout(20)
-        ssl_socket = SSLSocket('dodo.minion', new_socket)
+    @staticmethod
+    def get_ssl_socket():
+        return SSLSocket(HOST, PORT, socket(AF_INET, SOCK_STREAM))
 
-        ssl_socket.connect()
+    def test_that_should_connect_ssl_socket(self):
+        with self.get_ssl_socket() as ssl_socket:
+            with Server((HOST, PORT), StreamRequestHandler):
+                ssl_socket.connect()
 
-        connect.assert_called_once_with(('dodo.minion', 443))
-        setblocking.assert_called_once_with(True)
-        self.assertFalse(ssl_socket.get_socket()._closed)
-        ssl_socket.close()
+                self.assertFalse(ssl_socket.get_socket()._closed)
 
-    @patch('socket.socket.setblocking')
-    @patch('socket.socket.connect')
-    def test_that_should_close_ssl_socket(self, connect, setblocking):
-        new_socket = socket(AF_INET, SOCK_STREAM)
-        new_socket.settimeout(20)
-        ssl_socket = SSLSocket('dodo.minion', new_socket)
-        ssl_socket.connect()
+    def test_that_should_close_ssl_socket(self):
+        with self.get_ssl_socket() as ssl_socket:
+            with Server((HOST, PORT), StreamRequestHandler):
+                ssl_socket.connect()
 
-        ssl_socket.close()
+                ssl_socket.close()
 
-        connect.assert_called_once_with(('dodo.minion', 443))
-        setblocking.assert_called_once_with(True)
-        self.assertTrue(ssl_socket.get_socket()._closed)
+                self.assertTrue(ssl_socket.get_socket()._closed)
 
     def test_that_should_get_sslv23_method_context(self):
         context = get_sslv23_method_context()
@@ -44,24 +86,72 @@ class SslAnalyserTest(TestCase):
         self.assertFalse(context.check_hostname)
         self.assertEqual(VERIFY_NONE, context.verify_mode)
 
-    @patch('OpenSSL.SSL.Connection.do_handshake')
-    @patch('OpenSSL.SSL.Connection.set_tlsext_host_name')
-    @patch('OpenSSL.SSL.Connection.set_connect_state')
-    def test_that_should_get_ssl_connection(self,
-                                            set_connect_state,
-                                            set_tlsext_host_name,
-                                            do_handshake):
-        context = Context(SSLv23_METHOD)
-        context.check_hostname = False
-        context.verify_mode = VERIFY_NONE
+    def test_that_should_get_ssl_connection(self):
+        with self.get_ssl_socket() as ssl_socket:
+            with Server((HOST, PORT), StreamRequestHandler):
+                ssl_socket.connect()
+                context = get_sslv23_method_context()
 
-        new_socket = socket(AF_INET, SOCK_STREAM)
-        new_socket.settimeout(20)
+                ssl_connection = get_ssl_connection(context,
+                                                    ssl_socket.get_domain(),
+                                                    ssl_socket.get_socket())
 
-        connection = get_ssl_connection(context, new_socket, 'dodo.minion')
+                ssl_connection.do_handshake()
+                self.assertIsNotNone(ssl_connection)
 
-        self.assertIsNotNone(connection)
-        set_connect_state.assert_called_once_with()
-        set_tlsext_host_name.assert_called_once_with(b'dodo.minion')
-        do_handshake.assert_called_once_with()
-        new_socket.close()
+    def test_that_should_get_cert_issuer_from_ssl_connection(self):
+        with self.get_ssl_socket() as ssl_socket:
+            with Server((HOST, PORT), StreamRequestHandler):
+                ssl_socket.connect()
+                context = get_sslv23_method_context()
+                ssl_connection = get_ssl_connection(context,
+                                                    ssl_socket.get_domain(),
+                                                    ssl_socket.get_socket())
+                ssl_connection.do_handshake()
+
+                peer_cert = get_peer_certificate(ssl_connection)
+                crypto_cert = get_cryptography_certificate(peer_cert)
+                cert_issuer = get_certificate_issuer(crypto_cert)
+                issuer = get_issuer_oid_common_name(cert_issuer)
+
+                self.assertIsNotNone(issuer)
+                self.assertEqual('127.0.0.1', issuer)
+
+    def test_that_should_get_cert_issuer_from_domain_name(self):
+        with Server((HOST, PORT), StreamRequestHandler):
+            server_cert = get_server_certificate(HOST, PORT)
+            loaded_cert = load_certificate(server_cert)
+            issuer = get_cert_issuer(loaded_cert)
+
+            self.assertIsNotNone(issuer)
+            self.assertEqual('Localhost Co - 127.0.0.1', issuer)
+
+    def test_that_should_get_cert_expiration_from_domain_name(self):
+        with Server((HOST, PORT), StreamRequestHandler):
+            server_cert = get_server_certificate(HOST, PORT)
+            loaded_cert = load_certificate(server_cert)
+            expiration = get_cert_not_after_attribute(loaded_cert)
+
+            self.assertIsNotNone(expiration)
+            self.assertIsNotNone(
+                datetime.strptime(decode(expiration)[:-1], '%Y%m%d%H%M%S')
+            )
+
+    def test_that_should_get_cert_expiration_from_ssl_connection(self):
+        with self.get_ssl_socket() as ssl_socket:
+            with Server((HOST, PORT), StreamRequestHandler):
+                ssl_socket.connect()
+                context = get_sslv23_method_context()
+                ssl_connection = get_ssl_connection(context,
+                                                    ssl_socket.get_domain(),
+                                                    ssl_socket.get_socket())
+                ssl_connection.do_handshake()
+
+                peer_cert = get_peer_certificate(ssl_connection)
+                crypto_cert = get_cryptography_certificate(peer_cert)
+                expiration = get_cert_not_valid_after_attribute(crypto_cert)
+
+                self.assertIsNotNone(expiration)
+                self.assertIsNotNone(
+                    expiration.strftime('%d/%m/%Y %H:%M:%S')
+                )
