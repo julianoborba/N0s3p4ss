@@ -27,10 +27,8 @@ TESTS_PATH = abspath(dirname(__file__))
 
 class Server(ThreadingMixIn, TCPServer):
 
-    def __enter__(self):
-        server_thread = Thread(target=self.serve_forever)
-        server_thread.daemon = False
-        server_thread.start()
+    def start(self):
+        Thread(target=self.serve_forever).start()
 
     # run the command below in terminal to generate a new cert if needed
     #
@@ -52,12 +50,21 @@ class Server(ThreadingMixIn, TCPServer):
             server_side=True
         ), client_ip
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def stop(self):
         self.server_close()
         self.shutdown()
 
 
 class SslAnalyserTest(TestCase):
+    _ssl_server = Server((HOST, PORT), StreamRequestHandler)
+
+    @classmethod
+    def setUpClass(cls):
+        cls._ssl_server.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._ssl_server.stop()
 
     @staticmethod
     def get_ssl_socket():
@@ -65,19 +72,17 @@ class SslAnalyserTest(TestCase):
 
     def test_that_should_connect_ssl_socket(self):
         with self.get_ssl_socket() as ssl_socket:
-            with Server((HOST, PORT), StreamRequestHandler):
-                ssl_socket.connect()
+            ssl_socket.connect()
 
-                self.assertFalse(ssl_socket.get_socket()._closed)
+            self.assertFalse(ssl_socket.get_socket()._closed)
 
     def test_that_should_close_ssl_socket(self):
         with self.get_ssl_socket() as ssl_socket:
-            with Server((HOST, PORT), StreamRequestHandler):
-                ssl_socket.connect()
+            ssl_socket.connect()
 
-                ssl_socket.close()
+            ssl_socket.close()
 
-                self.assertTrue(ssl_socket.get_socket()._closed)
+            self.assertTrue(ssl_socket.get_socket()._closed)
 
     def test_that_should_get_sslv23_method_context(self):
         context = get_sslv23_method_context()
@@ -88,70 +93,65 @@ class SslAnalyserTest(TestCase):
 
     def test_that_should_get_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
-            with Server((HOST, PORT), StreamRequestHandler):
-                ssl_socket.connect()
-                context = get_sslv23_method_context()
+            ssl_socket.connect()
+            context = get_sslv23_method_context()
 
-                ssl_connection = get_ssl_connection(context,
-                                                    ssl_socket.get_domain(),
-                                                    ssl_socket.get_socket())
+            ssl_connection = get_ssl_connection(context,
+                                                ssl_socket.get_domain(),
+                                                ssl_socket.get_socket())
 
-                ssl_connection.do_handshake()
-                self.assertIsNotNone(ssl_connection)
+            ssl_connection.do_handshake()
+            self.assertIsNotNone(ssl_connection)
 
     def test_that_should_get_cert_issuer_from_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
-            with Server((HOST, PORT), StreamRequestHandler):
-                ssl_socket.connect()
-                context = get_sslv23_method_context()
-                ssl_connection = get_ssl_connection(context,
-                                                    ssl_socket.get_domain(),
-                                                    ssl_socket.get_socket())
-                ssl_connection.do_handshake()
+            ssl_socket.connect()
+            context = get_sslv23_method_context()
+            ssl_connection = get_ssl_connection(context,
+                                                ssl_socket.get_domain(),
+                                                ssl_socket.get_socket())
+            ssl_connection.do_handshake()
 
-                peer_cert = get_peer_certificate(ssl_connection)
-                crypto_cert = get_cryptography_certificate(peer_cert)
-                cert_issuer = get_certificate_issuer(crypto_cert)
-                issuer = get_issuer_oid_common_name(cert_issuer)
-
-                self.assertIsNotNone(issuer)
-                self.assertEqual('127.0.0.1', issuer)
-
-    def test_that_should_get_cert_issuer_from_domain_name(self):
-        with Server((HOST, PORT), StreamRequestHandler):
-            server_cert = get_server_certificate(HOST, PORT)
-            loaded_cert = load_certificate(server_cert)
-            issuer = get_cert_issuer(loaded_cert)
+            peer_cert = get_peer_certificate(ssl_connection)
+            crypto_cert = get_cryptography_certificate(peer_cert)
+            cert_issuer = get_certificate_issuer(crypto_cert)
+            issuer = get_issuer_oid_common_name(cert_issuer)
 
             self.assertIsNotNone(issuer)
-            self.assertEqual('Localhost Co - 127.0.0.1', issuer)
+            self.assertEqual('127.0.0.1', issuer)
+
+    def test_that_should_get_cert_issuer_from_domain_name(self):
+        server_cert = get_server_certificate(HOST, PORT)
+        loaded_cert = load_certificate(server_cert)
+        issuer = get_cert_issuer(loaded_cert)
+
+        self.assertIsNotNone(issuer)
+        self.assertEqual('Localhost Co - 127.0.0.1', issuer)
 
     def test_that_should_get_cert_expiration_from_domain_name(self):
-        with Server((HOST, PORT), StreamRequestHandler):
-            server_cert = get_server_certificate(HOST, PORT)
-            loaded_cert = load_certificate(server_cert)
-            expiration = get_cert_not_after_attribute(loaded_cert)
+        server_cert = get_server_certificate(HOST, PORT)
+        loaded_cert = load_certificate(server_cert)
+        expiration = get_cert_not_after_attribute(loaded_cert)
 
-            self.assertIsNotNone(expiration)
-            self.assertIsNotNone(
-                datetime.strptime(decode(expiration)[:-1], '%Y%m%d%H%M%S')
-            )
+        self.assertIsNotNone(expiration)
+        self.assertIsNotNone(
+            datetime.strptime(decode(expiration)[:-1], '%Y%m%d%H%M%S')
+        )
 
     def test_that_should_get_cert_expiration_from_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
-            with Server((HOST, PORT), StreamRequestHandler):
-                ssl_socket.connect()
-                context = get_sslv23_method_context()
-                ssl_connection = get_ssl_connection(context,
-                                                    ssl_socket.get_domain(),
-                                                    ssl_socket.get_socket())
-                ssl_connection.do_handshake()
+            ssl_socket.connect()
+            context = get_sslv23_method_context()
+            ssl_connection = get_ssl_connection(context,
+                                                ssl_socket.get_domain(),
+                                                ssl_socket.get_socket())
+            ssl_connection.do_handshake()
 
-                peer_cert = get_peer_certificate(ssl_connection)
-                crypto_cert = get_cryptography_certificate(peer_cert)
-                expiration = get_cert_not_valid_after_attribute(crypto_cert)
+            peer_cert = get_peer_certificate(ssl_connection)
+            crypto_cert = get_cryptography_certificate(peer_cert)
+            expiration = get_cert_not_valid_after_attribute(crypto_cert)
 
-                self.assertIsNotNone(expiration)
-                self.assertIsNotNone(
-                    expiration.strftime('%d/%m/%Y %H:%M:%S')
-                )
+            self.assertIsNotNone(expiration)
+            self.assertIsNotNone(
+                expiration.strftime('%d/%m/%Y %H:%M:%S')
+            )
