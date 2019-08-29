@@ -4,7 +4,7 @@
 
 Nosepass is an automated audition tool for Internet facing services. It gives visibility for the following informations:
 ```bash
-- If it is possible to access target via tor browser
+- If it is possible to access target via TOR Browser
 - Open Ports
 - The absence of critical headers or disclosed information through headers
 - SSL certificate
@@ -31,7 +31,7 @@ make install
 
 <a name="clean"></a>**Clean Environment**
 
-To clean all enviroment dependencies from [pipenv](https://pipenv-fork.readthedocs.io/en/latest/) ,run:
+To clean all enviroment dependencies from [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
 ```bash
 make clean
 ```

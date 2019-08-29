@@ -1,32 +1,54 @@
 from unittest import TestCase
+from unittest.mock import patch
 from tor_session_connector import TorSession
 from requests import session
-from unittest.mock import patch
+from requests.sessions import Session
+from requests.models import Response
+
+USER_AGENT = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
+                  'AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/50.0.2661.102 '
+                  'Safari/537.36'
+}
 
 
 class TorSessionConnectorTest(TestCase):
 
-    def test_that_should_return_tor_proxies(self):
-        current_session = session()
-        tor_connection = TorSession(current_session, 'user-agent')
-        tor_proxies = getattr(tor_connection, 'tor_session').proxies
-        self.assertIsNotNone(tor_proxies)
-        self.assertEqual({'http': 'socks5://127.0.0.1:9150',
-                          'https': 'socks5://127.0.0.1:9150'}, tor_proxies)
+    def test_that_should_set_tor_proxies_to_session(self):
+        new_session = session()
 
-    @patch('requests.session')
-    def test_that_should_check_if_get_request_return_something(self,
-                                                               session):
-        current_session = session
-        tor_connection = TorSession(current_session, 'user-agent')
-        tor_connection.get('https://check.torproject.org')
-        session.get.assert_called_once_with('https://check.torproject.org',
-                                            headers='user-agent', timeout=20,
-                                            verify=False)
+        TorSession(new_session, USER_AGENT)
 
-    @patch('requests.session')
-    def test_that_should_close_tor_session(self, session):
-        current_session = session
-        tor_connection = TorSession(current_session, 'user-agent')
+        self.assertEqual(
+            {
+                'http': 'socks5://127.0.0.1:9150',
+                'https': 'socks5://127.0.0.1:9150'
+            },
+            new_session.proxies
+        )
+
+    @patch.object(Session, 'get')
+    def test_that_should_get_response_from_tor_session_request(self, get):
+        check_tor_response = Response()
+        check_tor_response.status_code = 200
+        get.return_value = check_tor_response
+        tor_connection = TorSession(session(), USER_AGENT)
+
+        response = tor_connection.get('https://check.torproject.org')
+
+        get.assert_called_once_with(
+            'https://check.torproject.org',
+            headers=USER_AGENT,
+            timeout=20,
+            verify=False
+        )
+        self.assertEqual(200, response.status_code)
+
+    @patch.object(Session, 'close')
+    def test_that_should_close_tor_session(self, close):
+        tor_connection = TorSession(session(), USER_AGENT)
+
         tor_connection.close()
-        session.close.assert_called_once_with()
+
+        close.assert_called_once_with()
