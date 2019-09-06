@@ -10,4 +10,4 @@ logger.addHandler(handler)
 
 
 def get_logger():
-    return getStructLogger("main")
+    return getStructLogger('main')

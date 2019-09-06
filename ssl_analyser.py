@@ -24,7 +24,7 @@ class SSLSocket:
             self._ssl_socket.setblocking(True)
         except Exception as connect_error:
             self._ssl_socket.close()
-            getLogger().error("socket not connected to domain %s, cause %s",
+            getLogger().error('socket not connected to domain %s, cause %s',
                               self._domain,
                               connect_error,
                               exc_info=1)

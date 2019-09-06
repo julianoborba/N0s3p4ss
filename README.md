@@ -14,6 +14,8 @@ Nosepass is an automated audition tool for Internet facing services. It gives vi
 - __[Installation](#install)__
     - ____[Install Dependecies](#pipenv)____
     - ____[Clean Environment](#clean)____
+- __[Usage](#usage)__
+    - ____[Main Audit](#main)____
 - __[Tests](#tests)__
     - ____[Code lint](#lint)____
     - ____[Code Coverage](#coverage)____
@@ -36,6 +38,19 @@ To clean all enviroment dependencies from [pipenv](https://pipenv-fork.readthedo
 make clean
 ```
 
+## <a name="usage"></a>Usage
+
+<a name="clean"></a>**Main Audit**
+
+Main audit can be executed through [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
+```bash
+pipenv run python3 main.py --url 'url_target'
+```
+
+For additional help, run:
+```bash
+pipenv run python3 main.py -h
+```
 
 ## <a name="tests"></a>Tests
 
