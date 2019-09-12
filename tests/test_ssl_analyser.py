@@ -1,5 +1,13 @@
 from unittest import TestCase
-from ssl_analyser import SSLSocket, \
+from socket import AF_INET, SOCK_STREAM, socket
+from OpenSSL.SSL import VERIFY_NONE
+from datetime import datetime
+from idna import decode
+from threading import Thread
+from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
+from ssl import wrap_socket
+from os.path import abspath, dirname
+from nosepass.ssl_analyser import SSLSocket, \
     get_sslv23_method_context, \
     get_ssl_connection, \
     get_peer_certificate, \
@@ -11,14 +19,6 @@ from ssl_analyser import SSLSocket, \
     get_cert_issuer, \
     get_cert_not_after_attribute, \
     get_cert_not_valid_after_attribute
-from socket import AF_INET, SOCK_STREAM, socket
-from OpenSSL.SSL import VERIFY_NONE
-from datetime import datetime
-from idna import decode
-from threading import Thread
-from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
-from ssl import wrap_socket
-from os.path import abspath, dirname
 
 HOST = '127.0.0.1'
 PORT = 9192

@@ -24,10 +24,12 @@ class SSLSocket:
             self._ssl_socket.setblocking(True)
         except Exception as connect_error:
             self._ssl_socket.close()
-            getLogger().error('socket not connected to domain %s, cause %s',
-                              self._domain,
-                              connect_error,
-                              exc_info=1)
+            getLogger().error(
+                'socket not connected to domain %s, cause %s',
+                self._domain,
+                connect_error,
+                exc_info=1
+            )
 
     def get_domain(self):
         return self._domain
@@ -93,7 +95,7 @@ def get_cert_cn(certificate):
 
 def get_cert_issuer(loaded_certificate):
     return f'{get_cert_organization_name(loaded_certificate)} - ' \
-        f'{get_cert_cn(loaded_certificate)}'
+           f'{get_cert_cn(loaded_certificate)}'
 
 
 def get_cert_not_valid_after_attribute(cryptography_certificate):
