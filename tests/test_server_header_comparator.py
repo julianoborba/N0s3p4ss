@@ -1,5 +1,6 @@
 from unittest import TestCase
-from server_header_comparator import is_amazon_s3, compare_nginx_version
+from nosepass.server_header_comparator import is_amazon_s3, \
+    compare_nginx_version
 
 
 class ServerHeaderComparatorTest(TestCase):
