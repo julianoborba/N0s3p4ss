@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from tor_session_connector import TorSession
+from nosepass.tor_session_connector import TorSession
 from requests.sessions import Session
 from requests.models import Response
 
@@ -34,12 +34,12 @@ class TorSessionConnectorTest(TestCase):
             get.return_value = check_tor_response
             tor_connection = TorSession(session, USER_AGENT)
 
-            response = tor_connection.get('https://check.torproject.org')
+            response = tor_connection.get('https://check.torproject.org', 40)
 
             get.assert_called_once_with(
                 'https://check.torproject.org',
                 headers=USER_AGENT,
-                timeout=20,
+                timeout=40,
                 verify=False
             )
             self.assertEqual(200, response.status_code)
