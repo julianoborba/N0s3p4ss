@@ -1,7 +1,7 @@
 from requests.sessions import Session
 from requests.exceptions import HTTPError, ConnectionError
 from requests.models import Response
-from custom_json_logger import getLogger
+from nosepass.custom_json_logger import getLogger
 
 USER_AGENT = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '

@@ -1,5 +1,5 @@
 from nmap import PortScanner
-from custom_json_logger import getLogger
+from nosepass.custom_json_logger import getLogger
 
 
 def scan_ports_with_nmap(host):
