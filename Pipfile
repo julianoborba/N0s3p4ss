@@ -20,6 +20,7 @@ structlog = "==19.1.0"
 python-nmap = "==0.6.1"
 pysocks = "==1.7.0"
 packaging = "==19.1"
+marshmallow = "==3.2.0"
 
 [requires]
 python_version = "3.7"

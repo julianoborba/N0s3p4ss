@@ -1,0 +1,27 @@
+{
+  "url": "https://account-api.grupozap.com/",
+  "tor": false,
+  "wafestruz": [
+    "Cloudflare (Cloudflare Inc.)"
+  ],
+  "alerts": [
+    "\"Access-control-allow-origin\" not present!",
+    "\"Content-security-policy\" not present!",
+    "\"Path\" defined as \"/\"!"
+  ],
+  "status": 403,
+  "subdomain": "account-api.grupozap.com",
+  "cert_info": {
+    "expiration": "2020-10-21",
+    "issuer": "RapidSSL RSA CA 2018"
+  },
+  "ipipuhaa": "104.17.160.19",
+  "score": 8,
+  "open_ports": [
+    80,
+    443,
+    8080,
+    8443
+  ],
+  "serverus": "cloudflare"
+}
