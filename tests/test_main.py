@@ -1,5 +1,5 @@
 from unittest import TestCase
-from subprocess import run, DEVNULL, STDOUT, Popen, PIPE
+from subprocess import STDOUT, Popen, PIPE
 from os.path import abspath, dirname
 from test.support import EnvironmentVarGuard
 
@@ -26,18 +26,7 @@ class MainTest(TestCase):
             self.assertTrue('show this help message and exit' in str(stdout))
             self.assertIsNone(stderr)
 
-    def test_that_should_return_success_when_using_url_param(self):
-        with self.environment:
-            process = str(run(
-                f'pipenv run python3 {TESTS_PATH}/../main.py'
-                f' --url https://www.google.com',
-                stdout=DEVNULL,
-                stderr=STDOUT,
-                shell=True
-            ))
-            self.assertNotEqual(-1, process.find('returncode=0'))
-
-    def test_that_should_alert_url_param_as_required(self):
+    def test_that_should_alert_domain_param_as_required(self):
         with self.environment:
             process = Popen(['pipenv',
                              'run',

@@ -1,16 +1,21 @@
 from argparse import ArgumentParser
+from nosepass.domain_lister import SubdomainList
 
 argument_parser = ArgumentParser(
-    usage='pipenv run python3 main.py --url [target_url]'
+    usage='pipenv run python3 main.py --domains [target_domains]'
 )
 
 required_arguments = argument_parser.add_argument_group('required arguments')
 required_arguments.add_argument(
-    '--url',
-    metavar='target_url',
+    '--domains',
+    metavar='target_domains',
     type=str,
     required=True,
-    help='A url string target that going to be analysed'
+    help='Domains to be analysed',
+    nargs='+'
 )
 
-argument_parser.parse_args()
+target_domains = argument_parser.parse_args().domains
+subdomains = SubdomainList().list_each_domain_subdomains(target_domains)
+
+print(subdomains)
