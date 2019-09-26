@@ -2,26 +2,19 @@ from requests.sessions import Session
 from requests.exceptions import HTTPError, ConnectionError
 from requests.models import Response
 from nosepass.custom_json_logger import getLogger
+from nosepass.config import config
 
-USER_AGENT = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
-                  'AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/50.0.2661.102 '
-                  'Safari/537.36'
-}
+CONFIG = config()
 
-PROXIES = {
-    'http': 'http://18.229.145.152:8888',
-    'https': 'http://18.229.145.152:8888'
-}
+IS_ENABLED = True
 
 
 def do_get(url):
     try:
         with Session() as session:
             response = session.get(
-                headers=USER_AGENT,
-                proxies=PROXIES,
+                headers=CONFIG.HTTP_SESSION_HEADERS,
+                proxies=CONFIG.HTTP_SESSION_PROXIES,
                 timeout=10,
                 url=f'http://{url}',
                 verify=False
@@ -36,9 +29,7 @@ def do_get(url):
 
     except ConnectionError as connection_error:
         getLogger().error(
-            'ConnectionError for %s, cause %s',
-            url,
-            connection_error,
-            exc_info=1
+            f'ConnectionError for {url}, cause {connection_error}',
+            exc_info=IS_ENABLED
         )
         return Response()

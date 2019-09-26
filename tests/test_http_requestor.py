@@ -5,16 +5,15 @@ from requests.sessions import Session
 from requests.exceptions import ConnectionError
 from nosepass.http_requestor import do_get
 
-USER_AGENT = {
+HTTP_SESSION_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '
                   'AppleWebKit/537.36 (KHTML, like Gecko) '
                   'Chrome/50.0.2661.102 '
                   'Safari/537.36'
 }
-
-PROXIES = {
-    'http': 'http://18.229.145.152:8888',
-    'https': 'http://18.229.145.152:8888'
+HTTP_SESSION_PROXIES = {
+    'http': 'http://10.154.11.143:8888',
+    'https': 'http://10.154.11.143:8888'
 }
 
 
@@ -28,8 +27,8 @@ class HTTPRequestorTest(TestCase):
 
         response = do_get('www.google.com')
         get.assert_called_once_with(
-            headers=USER_AGENT,
-            proxies=PROXIES,
+            headers=HTTP_SESSION_HEADERS,
+            proxies=HTTP_SESSION_PROXIES,
             timeout=10,
             url='http://www.google.com',
             verify=False
