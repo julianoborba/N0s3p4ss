@@ -1,8 +1,6 @@
-# Nosepass
+# N0s3p4ss
 
-<img src="https://pokemonqrcode.com/image/cache/catalog/Pokemon/Gen3/nosepass-500x500.jpg" width="250" height="250"/>
-
-Nosepass is an automated audition tool for Internet facing services. It gives visibility for the following informations:
+N0s3p4ss is an automated audition tool for Internet facing services. It gives visibility for the following informations:
 ```bash
 - If it is possible to access target via TOR Browser
 - Open Ports
