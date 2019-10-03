@@ -1,7 +1,7 @@
 from Sublist3r.sublist3r import main
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures._base import TimeoutError
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from nosepass.custom_json_logger import getLogger
+from itertools import chain
 
 
 class SubdomainList:
@@ -24,17 +24,20 @@ class SubdomainList:
 
         with ThreadPoolExecutor(max_workers=threads) as executor:
             try:
-                iterator = executor.map(self.list_subdomains, target_domains)
+                subdomains_listing_iteration = list(
+                    chain.from_iterable(
+                        executor.map(
+                            self.list_subdomains,
+                            target_domains
+                        )
+                    )
+                )
             except TimeoutError as timeout_error:
                 getLogger().error(
-                    'Error while trying to map target domains to iterator, '
+                    'Error while trying to enumerate subdomains from domains, '
                     'cause %s',
                     timeout_error,
                     exc_info=1
                 )
                 return []
-            subdomain_listing_iteration = zip(target_domains, iterator)
-            subdomains = []
-            for subdomain in subdomain_listing_iteration:
-                subdomains.append(subdomain)
-            return subdomains
+            return [subdomains for subdomains in subdomains_listing_iteration]

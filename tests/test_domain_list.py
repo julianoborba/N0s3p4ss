@@ -1,26 +1,21 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.domain_lister import SubdomainList
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures._base import TimeoutError
+from nosepass.domain_list import SubdomainList
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 
-class DomainListerTest(TestCase):
+class DomainListTest(TestCase):
 
     @patch.object(SubdomainList, 'list_subdomains')
     def test_that_should_get_subdomains_from_domains(self, list_subdomains):
         expected_subdomains = [
-            (
-                'grupozap.com', ['www.grupozap.com', 'www.vivareal.com']
-            ),
-            (
-                'vivareal.com', ['www.grupozap.com', 'www.vivareal.com']
-            )
+            'www.grupozap.com', 'www.vivareal.com',
+            'www.grupozap.com', 'www.vivareal.com'
         ]
         list_subdomains.return_value = ['www.grupozap.com', 'www.vivareal.com']
 
         current_subdomains = SubdomainList().list_each_domain_subdomains(
-            ['grupozap.com', 'vivareal.com']
+            ['grupozap.com', 'vivareal.com'],
         )
 
         self.assertEqual(expected_subdomains, current_subdomains)
