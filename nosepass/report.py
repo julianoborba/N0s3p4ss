@@ -18,4 +18,3 @@ class ReportSchema(Schema):
     waf = List(Str())
     open_ports = List(Int())
     alerts = List(Str())
-    score = Int()

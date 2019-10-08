@@ -16,7 +16,6 @@
     "issuer": "RapidSSL RSA CA 2018"
   },
   "ipipuhaa": "104.17.160.19",
-  "score": 8,
   "open_ports": [
     80,
     443,

@@ -1,13 +1,13 @@
 from pythonjsonlogger import jsonlogger
-from logging import StreamHandler, getLogger
-from structlog import getLogger as getStructLogger
+from logging import StreamHandler, getLogger, INFO
 
-handler = StreamHandler()
-handler.setFormatter(jsonlogger.JsonFormatter())
+json_handler = StreamHandler()
+json_handler.setFormatter(jsonlogger.JsonFormatter())
 
-logger = getLogger()
-logger.addHandler(handler)
+custom_logger = getLogger('custom_logger')
+custom_logger.addHandler(json_handler)
+custom_logger.setLevel(INFO)
 
-
-def get_logger():
-    return getStructLogger('main')
+output_logger = getLogger('output_logger')
+output_logger.addHandler(StreamHandler())
+output_logger.setLevel(INFO)

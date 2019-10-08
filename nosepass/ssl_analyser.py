@@ -1,10 +1,12 @@
 from OpenSSL.SSL import Context, SSLv23_METHOD, VERIFY_NONE, Connection
 from idna import encode
-from nosepass.custom_json_logger import getLogger
+from nosepass.custom_json_logger import custom_logger
 from cryptography.x509.oid import NameOID
 from OpenSSL.crypto import load_certificate as load_server_certificate, \
     FILETYPE_PEM
 from ssl import get_server_certificate as get_ssl_server_certificate
+
+IS_ENABLED = True
 
 
 class SSLSocket:
@@ -24,11 +26,11 @@ class SSLSocket:
             self._ssl_socket.setblocking(True)
         except Exception as connect_error:
             self._ssl_socket.close()
-            getLogger().error(
+            custom_logger.error(
                 'socket not connected to domain %s, cause %s',
                 self._domain,
                 connect_error,
-                exc_info=1
+                exc_info=IS_ENABLED
             )
 
     def get_domain(self):

@@ -31,8 +31,7 @@ class ReportTest(TestCase):
                 '"Access-control-allow-origin" not present!',
                 '"Content-security-policy" not present!',
                 '"Path" defined as "/"!'
-            ],
-            score=8
+            ]
         )
 
         cls.bad_report = dict(
@@ -49,8 +48,7 @@ class ReportTest(TestCase):
                 '"Access-control-allow-origin" not present!',
                 '"Content-security-policy" not present!',
                 '"Path" defined as "/"!'
-            ],
-            score=8
+            ]
         )
 
         cls.report_schema = ReportSchema()

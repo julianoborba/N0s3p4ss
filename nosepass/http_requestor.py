@@ -1,7 +1,7 @@
 from requests.sessions import Session
 from requests.exceptions import HTTPError, ConnectionError, ReadTimeout
 from requests.models import Response
-from nosepass.custom_json_logger import getLogger
+from nosepass.custom_json_logger import custom_logger
 from nosepass.config import config
 
 CONFIG = config()
@@ -28,14 +28,18 @@ def do_get(url):
         return response
 
     except ConnectionError as connection_error:
-        getLogger().error(
+        custom_logger.error(
             f'ConnectionError for {url}, cause {connection_error}',
             exc_info=IS_ENABLED
         )
-        return Response()
+        response = Response()
+        response.status_code = 503
+        return response
     except ReadTimeout as timeout_error:
-        getLogger().error(
+        custom_logger.error(
             f'ReadTimeout for {url}, cause {timeout_error}',
             exc_info=IS_ENABLED
         )
-        return Response()
+        response = Response()
+        response.status_code = 408
+        return response

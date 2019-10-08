@@ -1,5 +1,7 @@
 from nmap import PortScanner
-from nosepass.custom_json_logger import getLogger
+from nosepass.custom_json_logger import custom_logger
+
+IS_ENABLED = True
 
 
 def scan_ports_with_nmap(host):
@@ -9,10 +11,9 @@ def scan_ports_with_nmap(host):
 
 def get_ports_only_from_nmap_scan(scan, host):
     if host not in scan['scan']:
-        getLogger().error(
-            'host %s not found in nmap scan',
-            host,
-            exc_info=1
+        custom_logger.error(
+            f'host {host} not found in nmap scan',
+            exc_info=IS_ENABLED
         )
         return {}
     ports = (scan['scan'][host]['tcp']).copy()

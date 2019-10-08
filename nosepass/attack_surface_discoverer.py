@@ -1,4 +1,4 @@
-from nosepass.custom_json_logger import getLogger
+from nosepass.custom_json_logger import custom_logger
 from nosepass.http_requestor import do_get
 from nosepass.ports_analyser import \
     scan_ports_with_nmap, \
@@ -15,7 +15,7 @@ def get_host_by_name(domain):
     try:
         return gethostbyname(domain)
     except Exception as socket_error:
-        getLogger().error(
+        custom_logger.error(
             f'an error occurred while trying to get host'
             f' by name from domain {domain}, cause {socket_error}',
             exc_info=IS_ENABLED
@@ -25,6 +25,7 @@ def get_host_by_name(domain):
 
 @dataclass
 class HostAttackSurface:
+    domain: str
     http_response: Response
     server_header: str
     response_url_location: str
@@ -45,6 +46,7 @@ def discover(domain):
         open_ports = retrieve_open_ports(ports)
 
     return HostAttackSurface(
+        domain=domain,
         http_response=response,
         server_header=server,
         response_url_location=url,

@@ -1,7 +1,9 @@
 from Sublist3r.sublist3r import main
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from nosepass.custom_json_logger import getLogger
+from nosepass.custom_json_logger import custom_logger
 from itertools import chain
+
+IS_ENABLED = True
 
 
 class SubdomainList:
@@ -33,11 +35,10 @@ class SubdomainList:
                     )
                 )
             except TimeoutError as timeout_error:
-                getLogger().error(
-                    'Error while trying to enumerate subdomains from domains, '
-                    'cause %s',
-                    timeout_error,
-                    exc_info=1
+                custom_logger.error(
+                    f'Error while trying to enumerate subdomains '
+                    f'from domains, cause {timeout_error}',
+                    exc_info=IS_ENABLED
                 )
                 return []
             return [subdomains for subdomains in subdomains_listing_iteration]

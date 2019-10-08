@@ -13,19 +13,33 @@ class SnifferTest(TestCase):
     def test_that_should_retrieve_attack_surfaces(self,
                                                   list_each_domain_subdomains,
                                                   discover):
+        list_each_domain_subdomains.return_value = [
+            'www.grupozap.com', 'www.grupozap.com'
+        ]
+        response = Response()
+        response.status_code = 404
         host_attack_surface = HostAttackSurface(
-            http_response=Response(),
+            domain='www.grupozap.com',
+            http_response=response,
             server_header='openresty',
             response_url_location='https://www.grupozap.com:443/',
             host='107.178.254.45',
             open_ports=[80, 110, 143, 443, 465, 587, 700, 993, 995, 3389, 5900]
         )
-        expected_attack_surfaces = [host_attack_surface, host_attack_surface]
-        list_each_domain_subdomains.return_value = [
-            'www.grupozap.com', 'www.grupozap.com'
-        ]
         discover.return_value = host_attack_surface
+        report = dict({'alerts': ['Server disclosed!'],
+                       'cert_info': {},
+                       'ip': '107.178.254.45',
+                       'open_ports': [80, 110, 143, 443, 465, 587,
+                                      700, 993, 995, 3389, 5900],
+                       'server': 'openresty',
+                       'status': 404,
+                       'subdomain': 'www.grupozap.com',
+                       'tor': False,
+                       'url': 'https://www.grupozap.com:443/',
+                       'waf': []})
+        expected_sniffer_reports = [report, report]
 
-        attack_surfaces = sniff(['grupozap.com'])
+        sniffer_reports = sniff(['grupozap.com'])
 
-        self.assertEqual(expected_attack_surfaces, attack_surfaces)
+        self.assertEqual(expected_sniffer_reports, sniffer_reports)

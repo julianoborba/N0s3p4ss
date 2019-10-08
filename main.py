@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from nosepass.sniffer import sniff
-from json import dump
+from json import dumps
+from nosepass.custom_json_logger import output_logger
 
 IS_ENABLED = 1
 
@@ -21,6 +22,8 @@ if __name__ == '__main__':
         nargs='+'
     )
 
-    targert_domains = argument_parser.parse_args().domains
+    target_domains = argument_parser.parse_args().domains
 
-    dump(sniff(targert_domains), indent=IS_ENABLED)
+    output_logger.info(
+        dumps(sniff(target_domains), indent=IS_ENABLED)
+    )

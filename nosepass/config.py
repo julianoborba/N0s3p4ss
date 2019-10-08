@@ -17,6 +17,7 @@ class Config(object):
         'https': 'http://10.154.11.143:8888'
     }
     WAFW00F_PROXY = 'http://10.154.11.143:8888'
+    NGINX_SAFE_VERSION = '1.16.1'
 
 
 class ProductionConfig(Config):

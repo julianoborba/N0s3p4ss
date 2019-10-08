@@ -60,6 +60,7 @@ class AttackSurfaceDiscovererTest(TestCase):
         scan.return_value = self._nmap_scan_result
 
         expected_discover_results = HostAttackSurface(
+            domain='www.grupozap.com',
             http_response=response,
             server_header='openresty',
             response_url_location='https://www.grupozap.com:443/',
