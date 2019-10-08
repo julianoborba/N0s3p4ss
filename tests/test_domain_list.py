@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.domain_list import SubdomainList
+from n0s3p4ss.domain_list import SubdomainList
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 

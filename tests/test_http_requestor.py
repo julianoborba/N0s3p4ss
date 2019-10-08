@@ -3,7 +3,7 @@ from unittest.mock import patch
 from requests.models import Response
 from requests.sessions import Session
 from requests.exceptions import ConnectionError, ReadTimeout
-from nosepass.http_requestor import do_get
+from n0s3p4ss.http_requestor import do_get
 
 HTTP_SESSION_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) '

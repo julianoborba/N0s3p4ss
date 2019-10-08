@@ -1,7 +1,7 @@
 from unittest import TestCase
-from nosepass.sniffer_switcher_http_status_based import apply_flow_for
-from nosepass.attack_surface_discoverer import HostAttackSurface
-from nosepass.report import ReportSchema, CertificateInformationsSchema
+from n0s3p4ss.sniffer_switcher_http_status_based import apply_flow_for
+from n0s3p4ss.attack_surface_discoverer import HostAttackSurface
+from n0s3p4ss.report import ReportSchema, CertificateInformationsSchema
 from requests.models import Response
 
 

@@ -1,6 +1,6 @@
-from nosepass.custom_json_logger import custom_logger
-from nosepass.http_requestor import do_get
-from nosepass.ports_analyser import \
+from n0s3p4ss.custom_json_logger import custom_logger
+from n0s3p4ss.http_requestor import do_get
+from n0s3p4ss.ports_analyser import \
     scan_ports_with_nmap, \
     get_ports_only_from_nmap_scan, \
     retrieve_open_ports

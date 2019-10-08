@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.tor_session_connector import TorSession
+from n0s3p4ss.tor_session_connector import TorSession
 from requests.sessions import Session
 from requests.models import Response
 

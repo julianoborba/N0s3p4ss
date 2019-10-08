@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.ports_analyser import get_ports_only_from_nmap_scan, \
+from n0s3p4ss.ports_analyser import get_ports_only_from_nmap_scan, \
     retrieve_open_ports, scan_ports_with_nmap
 
 

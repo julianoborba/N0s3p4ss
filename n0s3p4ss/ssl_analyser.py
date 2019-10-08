@@ -1,6 +1,6 @@
 from OpenSSL.SSL import Context, SSLv23_METHOD, VERIFY_NONE, Connection
 from idna import encode
-from nosepass.custom_json_logger import custom_logger
+from n0s3p4ss.custom_json_logger import custom_logger
 from cryptography.x509.oid import NameOID
 from OpenSSL.crypto import load_certificate as load_server_certificate, \
     FILETYPE_PEM

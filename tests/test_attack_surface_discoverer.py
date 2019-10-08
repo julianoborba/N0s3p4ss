@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch
 from requests.models import Response
 from requests.sessions import Session
-from nosepass.attack_surface_discoverer import discover, HostAttackSurface
+from n0s3p4ss.attack_surface_discoverer import discover, HostAttackSurface
 
 
 class AttackSurfaceDiscovererTest(TestCase):
@@ -45,7 +45,7 @@ class AttackSurfaceDiscovererTest(TestCase):
     }
 
     @patch('nmap.PortScanner.scan')
-    @patch('nosepass.attack_surface_discoverer.get_host_by_name')
+    @patch('n0s3p4ss.attack_surface_discoverer.get_host_by_name')
     @patch.object(Session, 'get')
     def test_that_should_obtain_domain_surface_info(self,
                                                     get,

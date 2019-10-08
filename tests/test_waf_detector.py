@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.waf_detector import detect
+from n0s3p4ss.waf_detector import detect
 from wafw00f.main import WafW00F
 
 

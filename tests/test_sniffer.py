@@ -1,14 +1,14 @@
 from unittest import TestCase
 from unittest.mock import patch
-from nosepass.sniffer import sniff
-from nosepass.domain_list import SubdomainList
-from nosepass.attack_surface_discoverer import HostAttackSurface
+from n0s3p4ss.sniffer import sniff
+from n0s3p4ss.domain_list import SubdomainList
+from n0s3p4ss.attack_surface_discoverer import HostAttackSurface
 from requests.models import Response
 
 
 class SnifferTest(TestCase):
 
-    @patch('nosepass.sniffer.discover')
+    @patch('n0s3p4ss.sniffer.discover')
     @patch.object(SubdomainList, 'list_each_domain_subdomains')
     def test_that_should_retrieve_attack_surfaces(self,
                                                   list_each_domain_subdomains,

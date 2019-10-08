@@ -1,5 +1,5 @@
 from unittest import TestCase
-from nosepass.report import ReportSchema
+from n0s3p4ss.report import ReportSchema
 from os.path import abspath, dirname
 from json import loads
 from datetime import date

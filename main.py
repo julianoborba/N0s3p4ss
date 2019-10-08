@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
-from nosepass.sniffer import sniff
+from n0s3p4ss.sniffer import sniff
 from json import dumps
-from nosepass.custom_json_logger import output_logger
+from n0s3p4ss.custom_json_logger import output_logger
 
 IS_ENABLED = 1
 

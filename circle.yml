@@ -1,5 +1,5 @@
 defaults: &environment
-  working_directory: ~/nosepass
+  working_directory: ~/n0s3p4ss
   docker:
     - image: circleci/python:3.7
 

@@ -7,7 +7,7 @@ from threading import Thread
 from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
 from ssl import wrap_socket
 from os.path import abspath, dirname
-from nosepass.ssl_analyser import SSLSocket, \
+from n0s3p4ss.ssl_analyser import SSLSocket, \
     get_sslv23_method_context, \
     get_ssl_connection, \
     get_peer_certificate, \

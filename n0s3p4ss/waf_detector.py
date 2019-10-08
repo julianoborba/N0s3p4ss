@@ -1,5 +1,5 @@
 from wafw00f.main import WafW00F
-from nosepass.config import config
+from n0s3p4ss.config import config
 
 CONFIG = config()
 

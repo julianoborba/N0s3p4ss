@@ -1,8 +1,8 @@
 from requests.sessions import Session
 from requests.exceptions import HTTPError, ConnectionError, ReadTimeout
 from requests.models import Response
-from nosepass.custom_json_logger import custom_logger
-from nosepass.config import config
+from n0s3p4ss.custom_json_logger import custom_logger
+from n0s3p4ss.config import config
 
 CONFIG = config()
 

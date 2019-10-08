@@ -1,6 +1,6 @@
 from Sublist3r.sublist3r import main
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from nosepass.custom_json_logger import custom_logger
+from n0s3p4ss.custom_json_logger import custom_logger
 from itertools import chain
 
 IS_ENABLED = True
