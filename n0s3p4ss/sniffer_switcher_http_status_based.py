@@ -7,7 +7,7 @@ from n0s3p4ss.config import config
 CONFIG = config()
 
 
-class HTTP404Flow:
+class ServerHeaderAnalyser:
 
     def apply(self, attack_surface):
         if not attack_surface.server_header:
@@ -39,6 +39,12 @@ class HTTP404Flow:
         ))
 
 
+class WebServerAnalyser:
+
+    def apply(self, attack_surface):
+        return ServerHeaderAnalyser().apply(attack_surface)
+
+
 class InvalidFlow:
 
     def apply(self, attack_surface):
@@ -55,7 +61,8 @@ def apply_flow_for(attack_surface):
         return get_default_report(attack_surface)
 
     switcher = {
-        404: HTTP404Flow()
+        404: ServerHeaderAnalyser(),
+        200: WebServerAnalyser()
     }
 
     return switcher.get(

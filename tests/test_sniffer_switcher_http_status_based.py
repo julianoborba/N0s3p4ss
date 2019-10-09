@@ -93,3 +93,32 @@ class SnifferSwitcherHTTPStatusBasedTest(TestCase):
         invalid_flow_result = apply_flow_for(attack_surface)
 
         self.assertEqual(expected_invalid_flow_result, invalid_flow_result)
+
+    def that_should_not_return_invalid_when_http_status_200(self):
+        response = Response()
+        response.status_code = 200
+
+        attack_surface = HostAttackSurface(
+            domain='www.grupozap.com',
+            http_response=response,
+            server_header='openresty',
+            response_url_location='https://www.grupozap.com:443/',
+            host='107.178.254.45',
+            open_ports=[80, 110, 143, 443, 465, 587, 700, 993, 995, 3389, 5900]
+        )
+        invalid_flow_result = ReportSchema().load(dict(
+            subdomain=attack_surface.domain,
+            url=attack_surface.response_url_location,
+            ip=attack_surface.host,
+            status=attack_surface.http_response.status_code,
+            cert_info=CertificateInformationsSchema().load(dict()),
+            server=attack_surface.server_header,
+            tor=False,
+            waf=[],
+            open_ports=attack_surface.open_ports,
+            alerts=[]
+        ))
+
+        http_200_flow_result = apply_flow_for(attack_surface)
+
+        self.assertNotEqual(invalid_flow_result, http_200_flow_result)
