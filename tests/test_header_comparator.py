@@ -1,9 +1,9 @@
 from unittest import TestCase
-from n0s3p4ss.server_header_comparator import is_amazon_s3, \
-    compare_nginx_version
+from n0s3p4ss.header_comparator import is_amazon_s3, \
+    compare_nginx_version, compare_access_control_allow_origin
 
 
-class ServerHeaderComparatorTest(TestCase):
+class HeaderComparatorTest(TestCase):
 
     def test_that_should_recognize_S3_server_header_with_version(self):
         server_header = 'AmazonS3/1.15.7'
@@ -37,3 +37,20 @@ class ServerHeaderComparatorTest(TestCase):
                          'Nginx expected version; '
                          'The expected version is 1.16.1',
                          compare_nginx_version(server_header, nginx_version))
+
+    def test_that_should_recoginize_sameorigin_from_allow_origin(self):
+        allow_origin = 'SAMEORIGIN'
+        self.assertEqual('"Allow-origin" present with value: SAMEORIGIN',
+                         compare_access_control_allow_origin(allow_origin))
+
+    def test_that_should_not_recoginize_sameorigin_from_allow_origin(self):
+        allow_origin = 'DENY'
+        self.assertEqual('"Allow-origin" present with value: DENY',
+                         compare_access_control_allow_origin(allow_origin))
+
+    def test_that_should_return_null_from_allow_origin(self):
+        allow_origin = None
+        self.assertEquals(
+            '',
+            compare_access_control_allow_origin(allow_origin)
+            )

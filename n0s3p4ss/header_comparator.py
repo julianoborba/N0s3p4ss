@@ -18,3 +18,14 @@ def compare_nginx_version(server_header, nginx_version_number):
 
     return ('The server Nginx version is the same as the expected Nginx '
             f'version; The expected version is {nginx_version_number}')
+
+
+def compare_access_control_allow_origin(access_control_allow_origin):
+    if not access_control_allow_origin:
+        return ''
+
+    if access_control_allow_origin != 'SAMEORIGIN':
+        return (f'"Allow-origin" present with value: '
+                f'{access_control_allow_origin}')
+
+    return '"Allow-origin" present with value: SAMEORIGIN'
