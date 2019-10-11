@@ -1,5 +1,5 @@
-from n0s3p4ss.header_comparator import is_amazon_s3
-from n0s3p4ss.header_comparator import compare_nginx_version
+from n0s3p4ss.header_validator import is_amazon_s3
+from n0s3p4ss.header_validator import compare_nginx_version
 from n0s3p4ss.report import ReportSchema, CertificateInformationsSchema
 from n0s3p4ss.custom_json_logger import custom_logger
 from n0s3p4ss.config import config
