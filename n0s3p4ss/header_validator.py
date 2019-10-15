@@ -22,7 +22,7 @@ def compare_nginx_version(server_header, nginx_version_number):
             f'version; The expected version is {nginx_version_number}')
 
 
-def is_access_control_allow_origin_with_sameorigin(headers={}):
+def is_ac_allow_origin_with_sameorigin(headers={}):
     ac_allow_origin = retrieve_access_control_allow_origin(headers)
     if not ac_allow_origin:
         return ''

@@ -2,7 +2,7 @@ from unittest import TestCase
 from n0s3p4ss.header_validator import is_amazon_s3, \
     compare_nginx_version, is_cookie_http_only_defined, \
     is_x_xss_protection_mode_block, is_cookie_path_denifed_as_slash, \
-    is_access_control_allow_origin_with_sameorigin
+    is_ac_allow_origin_with_sameorigin
 
 
 class HeaderValidatorTest(TestCase):
@@ -43,7 +43,7 @@ class HeaderValidatorTest(TestCase):
     def test_that_should_recoginize_sameorigin_from_allow_origin(self):
         allow_origin = {'Access-Control-Allow-Origin': 'SAMEORIGIN'}
         self.assertEqual('"Allow-origin" present with value: SAMEORIGIN',
-                         is_access_control_allow_origin_with_sameorigin(
+                         is_ac_allow_origin_with_sameorigin(
                              allow_origin
                              )
                          )
@@ -51,7 +51,7 @@ class HeaderValidatorTest(TestCase):
     def test_that_should_not_recoginize_sameorigin_from_allow_origin(self):
         allow_origin = {'Access-Control-Allow-Origin': 'DENY'}
         self.assertEqual('"Allow-origin" present with value: DENY',
-                         is_access_control_allow_origin_with_sameorigin(
+                         is_ac_allow_origin_with_sameorigin(
                              allow_origin
                              )
                          )
@@ -60,7 +60,7 @@ class HeaderValidatorTest(TestCase):
         allow_origin = {'Access-Control-Allow-Origin': None}
         self.assertEquals(
             '',
-            is_access_control_allow_origin_with_sameorigin(allow_origin)
+            is_ac_allow_origin_with_sameorigin(allow_origin)
             )
 
     def test_that_should_not_recognize_mode_block_in_x_xss_protection(self):

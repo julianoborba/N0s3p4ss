@@ -3,6 +3,11 @@ from n0s3p4ss.header_validator import compare_nginx_version
 from n0s3p4ss.report import ReportSchema, CertificateInformationsSchema
 from n0s3p4ss.custom_json_logger import custom_logger
 from n0s3p4ss.config import config
+from n0s3p4ss.header_validator import is_ac_allow_origin_with_sameorigin, \
+    is_x_xss_protection_mode_block
+from n0s3p4ss.sec_headers_obtainer import retrieve_x_frame_options, \
+    retrieve_strict_transport_security, retrieve_content_security_policy, \
+    retrieve_x_content_type_options
 
 CONFIG = config()
 
@@ -42,7 +47,33 @@ class ServerHeaderAnalyser:
 class WebServerAnalyser:
 
     def apply(self, attack_surface):
-        return ServerHeaderAnalyser().apply(attack_surface)
+        report = ServerHeaderAnalyser().apply(attack_surface)
+        headers = attack_surface.get('http_response', {}).get('headers', {})
+        alerts = []
+
+        if not headers:
+            alerts.append('No headers is present!')
+
+        if not retrieve_x_frame_options(headers):
+            alerts.append('"X-FRAME-OPTIONS" not present!')
+
+        if not retrieve_strict_transport_security(headers):
+            alerts.append('"Strict-transport-security" not present!')
+
+        if 'SAMEORIGIN' not in is_ac_allow_origin_with_sameorigin(headers):
+            alerts.append(is_ac_allow_origin_with_sameorigin(headers))
+
+        if not retrieve_content_security_policy(headers):
+            alerts.append('"Content-security-policy" not present!')
+
+        if 'mode=block' not in is_x_xss_protection_mode_block(headers):
+            alerts.append(is_x_xss_protection_mode_block(headers))
+
+        if not retrieve_x_content_type_options(headers):
+            alerts.append('"X-content-type-options" not present!')
+
+        report['alerts'].extend(alerts)
+        return report
 
 
 class InvalidFlow:
