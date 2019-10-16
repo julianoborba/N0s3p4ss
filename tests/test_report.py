@@ -2,7 +2,6 @@ from unittest import TestCase
 from n0s3p4ss.report import ReportSchema
 from os.path import abspath, dirname
 from json import loads
-from datetime import date
 from marshmallow.exceptions import ValidationError
 
 TESTS_PATH = abspath(dirname(__file__))
@@ -14,7 +13,7 @@ class ReportTest(TestCase):
     def setUpClass(cls):
         cls.certificate_informations = dict(
             issuer='RapidSSL RSA CA 2018',
-            expiration=date(2020, 10, 21)
+            expiration='2020-10-21'
         )
 
         cls.report = dict(
@@ -24,8 +23,8 @@ class ReportTest(TestCase):
             status=403,
             cert_info=cls.certificate_informations,
             server='cloudflare',
-            tor=False,
-            waf=['Cloudflare (Cloudflare Inc.)'],
+            tor_reachable=False,
+            detected_waf=['Cloudflare (Cloudflare Inc.)'],
             open_ports=[80, 443, 8080, 8443],
             alerts=[
                 '"Access-control-allow-origin" not present!',
@@ -41,7 +40,7 @@ class ReportTest(TestCase):
             status=403,
             cert_info=cls.certificate_informations,
             serverus='cloudflare',
-            tor=False,
+            tor_reachable=False,
             wafestruz=['Cloudflare (Cloudflare Inc.)'],
             open_ports=[80, 443, 8080, 8443],
             alerts=[

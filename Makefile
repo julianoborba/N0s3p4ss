@@ -8,16 +8,17 @@ install:
 	touch ./Sublist3r/__init__.py
 
 lint:
-	pipenv run flake8
-	pipenv run autopep8 --in-place --recursive .
-
-sonar_analysis:
-	SONAR_TOKEN=${SONAR_TOKEN} PROJECT_VERSION=$(git rev-parse --short HEAD)  envsubst < sonar-project.template.properties > sonar-project.properties
-	docker run -ti -v ~/project:/usr/src vivareal/sonar-scanner:latest
+	pipenv run flake8 --exclude="./Sublist3r"
+	pipenv run autopep8 --in-place --exclude="./Sublist3r" --recursive .
 
 test:
 	pipenv run python3 -m unittest discover tests -f
 
 coverage:
-	pipenv run coverage run --source ./ -m unittest discover
+	pipenv run coverage run --source n0s3p4ss -m unittest discover
 	pipenv run coverage report --fail-under=80
+
+.PHONY: sonar_analysis
+sonar_analysis:
+	sed -e 's/PROJECT_VERSION/${PROJECT_VERSION}/' < sonar-project.template.properties > sonar-project.properties
+	docker run -ti -v $(shell pwd):/usr/src vivareal/sonar-scanner:latest

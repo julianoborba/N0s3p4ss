@@ -18,6 +18,10 @@ class Config(object):
     }
     WAFW00F_PROXY = 'http://10.154.11.143:8888'
     NGINX_SAFE_VERSION = '1.16.1'
+    TOR_SESSION_PROXIES = {
+        'http': 'socks5://127.0.0.1:9150',
+        'https': 'socks5://127.0.0.1:9150'
+    }
 
 
 class ProductionConfig(Config):

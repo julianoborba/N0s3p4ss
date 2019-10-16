@@ -16,9 +16,9 @@ class SecHeadersAnalyserTest(TestCase):
             'X-Frame-Options': 'SAMEORIGIN'
         }
 
-        is_none = retrieve_x_frame_options(headers) is None
+        is_empty = retrieve_x_frame_options(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_x_frame_options_header(self):
         headers = {
@@ -26,9 +26,9 @@ class SecHeadersAnalyserTest(TestCase):
             'W-Frame-Options': 'SAMEORIGIN'
         }
 
-        is_none = retrieve_x_frame_options(headers) is None
+        is_empty = retrieve_x_frame_options(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_strict_transport_security_header(self):
         headers = {
@@ -36,9 +36,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'
         }
 
-        is_none = retrieve_strict_transport_security(headers) is None
+        is_empty = retrieve_strict_transport_security(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_strict_transport_security_header(self):
         headers = {
@@ -46,9 +46,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Strift-Transport-Security': 'max-age=31536000; includeSubDomains'
         }
 
-        is_none = retrieve_strict_transport_security(headers) is None
+        is_empty = retrieve_strict_transport_security(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_access_control_allow_origin_header(self):
         headers = {
@@ -56,9 +56,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Access-Control-Allow-Origin': '*'
         }
 
-        is_none = retrieve_access_control_allow_origin(headers) is None
+        is_empty = retrieve_access_control_allow_origin(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_access_control_allow_origin_header(self):
         headers = {
@@ -66,9 +66,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Access-Control-Allow-Origim': '*'
         }
 
-        is_none = retrieve_access_control_allow_origin(headers) is None
+        is_empty = retrieve_access_control_allow_origin(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_content_security_policy_header(self):
         headers = {
@@ -76,9 +76,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Content-Security-Policy': 'default-src https:'
         }
 
-        is_none = retrieve_content_security_policy(headers) is None
+        is_empty = retrieve_content_security_policy(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_content_security_policy_header(self):
         headers = {
@@ -86,9 +86,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Content-Security-Polici': 'default-src https:'
         }
 
-        is_none = retrieve_content_security_policy(headers) is None
+        is_empty = retrieve_content_security_policy(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_x_xss_protection_header(self):
         headers = {
@@ -96,9 +96,9 @@ class SecHeadersAnalyserTest(TestCase):
             'X-XSS-Protection': '1; mode=block'
         }
 
-        is_none = retrieve_x_xss_protection(headers) is None
+        is_empty = retrieve_x_xss_protection(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_x_xss_protection_header(self):
         headers = {
@@ -106,9 +106,9 @@ class SecHeadersAnalyserTest(TestCase):
             'X-XSC-Protection': '1; mode=block'
         }
 
-        is_none = retrieve_x_xss_protection(headers) is None
+        is_empty = retrieve_x_xss_protection(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_x_content_type_options_header(self):
         headers = {
@@ -116,9 +116,9 @@ class SecHeadersAnalyserTest(TestCase):
             'X-Content-Type-Options': 'nosniff'
         }
 
-        is_none = retrieve_x_content_type_options(headers) is None
+        is_empty = retrieve_x_content_type_options(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_x_content_type_options_header(self):
         headers = {
@@ -126,9 +126,9 @@ class SecHeadersAnalyserTest(TestCase):
             'X-Content-Type-0ptions': 'nosniff'
         }
 
-        is_none = retrieve_x_content_type_options(headers) is None
+        is_empty = retrieve_x_content_type_options(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)
 
     def test_that_should_retrieve_set_cookie_header(self):
         headers = {
@@ -136,9 +136,9 @@ class SecHeadersAnalyserTest(TestCase):
             'Set-Cookie': 'sessionid=38afes7a8; HttpOnly; Path=/'
         }
 
-        is_none = retrieve_set_cookie(headers) is None
+        is_empty = retrieve_set_cookie(headers) == ''
 
-        self.assertEqual(False, is_none)
+        self.assertEqual(False, is_empty)
 
     def test_that_should_not_retrieve_set_cookie_header(self):
         headers = {
@@ -146,6 +146,6 @@ class SecHeadersAnalyserTest(TestCase):
             'Set-Coukie': 'sessionid=38afes7a8; HttpOnly; Path=/'
         }
 
-        is_none = retrieve_set_cookie(headers) is None
+        is_empty = retrieve_set_cookie(headers) == ''
 
-        self.assertEqual(True, is_none)
+        self.assertEqual(True, is_empty)

@@ -44,7 +44,7 @@ class AttackSurfaceDiscovererTest(TestCase):
         }
     }
 
-    @patch('nmap.PortScanner.scan')
+    @patch('n0s3p4ss.attack_surface_discoverer.scan_ports_with_nmap')
     @patch('n0s3p4ss.attack_surface_discoverer.get_host_by_name')
     @patch.object(Session, 'get')
     def test_that_should_obtain_domain_surface_info(self,
@@ -70,4 +70,4 @@ class AttackSurfaceDiscovererTest(TestCase):
 
         discover_results = discover('www.grupozap.com')
 
-        self.assertEquals(expected_discover_results, discover_results)
+        self.assertEqual(expected_discover_results, discover_results)

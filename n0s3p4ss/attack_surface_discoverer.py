@@ -20,7 +20,7 @@ def get_host_by_name(domain):
             f' by name from domain {domain}, cause {socket_error}',
             exc_info=IS_ENABLED
         )
-        return ''
+    return ''
 
 
 @dataclass

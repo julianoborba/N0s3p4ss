@@ -54,10 +54,18 @@ def get_sslv23_method_context():
 
 
 def get_ssl_connection(context, domain, socket):
-    connection = Connection(context, socket)
-    connection.set_connect_state()
-    connection.set_tlsext_host_name(encode(domain))
-    return connection
+    try:
+        connection = Connection(context, socket)
+        connection.set_connect_state()
+        connection.set_tlsext_host_name(encode(domain))
+        return connection
+    except Exception as connection_error:
+        custom_logger.error(
+            f'ssl socket not connected to domain'
+            f' {domain}, cause {connection_error}',
+            exc_info=IS_ENABLED
+        )
+    return None
 
 
 def get_peer_certificate(ssl_connection):
@@ -80,7 +88,15 @@ def get_issuer_oid_common_name(issuer):
 
 
 def get_server_certificate(domain, port):
-    return get_ssl_server_certificate((encode(domain), port))
+    try:
+        return get_ssl_server_certificate((encode(domain), port))
+    except Exception as connection_error:
+        custom_logger.error(
+            f'server certificate could not be retrieved from'
+            f' {domain}, cause {connection_error}',
+            exc_info=IS_ENABLED
+        )
+    return None
 
 
 def load_certificate(server_certificate):

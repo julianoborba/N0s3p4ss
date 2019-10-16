@@ -38,11 +38,15 @@ make clean
 
 ## <a name="usage"></a>Usage
 
-<a name="clean"></a>**Main Audit**
+You need to have a TOR Browser Bundle instance running in order to enable N0s3p4ss TOR accessibility verification.
 
-Main audit can be executed through [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
+Also you need nmap already installed.
+
+You may need to customize the proxy server IP address at n0s3p4ss/config.py.
+
+N0s3p4ss audition can be executed through [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
 ```bash
-pipenv run python3 main.py --url 'url_target'
+pipenv run python3 main.py --domains 'target_domains'
 ```
 
 For additional help, run:

@@ -35,9 +35,9 @@ class SnifferTest(TestCase):
                        'server': 'openresty',
                        'status': 404,
                        'subdomain': 'www.grupozap.com',
-                       'tor': False,
+                       'tor_reachable': False,
                        'url': 'https://www.grupozap.com:443/',
-                       'waf': []})
+                       'detected_waf': []})
         expected_sniffer_reports = [report, report]
 
         sniffer_reports = sniff(['grupozap.com'])

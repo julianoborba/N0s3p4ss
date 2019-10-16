@@ -34,10 +34,10 @@ class TorSessionConnectorTest(TestCase):
             get.return_value = check_tor_response
             tor_connection = TorSession(session, USER_AGENT)
 
-            response = tor_connection.get('https://check.torproject.org', 40)
+            response = tor_connection.get('check.torproject.org', 40)
 
             get.assert_called_once_with(
-                'https://check.torproject.org',
+                'http://check.torproject.org',
                 headers=USER_AGENT,
                 timeout=40,
                 verify=False

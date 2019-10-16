@@ -83,14 +83,16 @@ class PortsAnalyserTest(TestCase):
 
         self.assertEqual([], retrieve_open_ports(ports))
 
-    @patch('nmap.PortScanner.scan')
-    def test_that_should_scan_ports_with_nmap(self, scan):
-        scan.return_value = self._nmap_scan_result
+    @patch('n0s3p4ss.ports_analyser.PortScanner')
+    def test_that_should_scan_ports_with_nmap(self, port_scanner):
+        port_scanner_mock = port_scanner.return_value
+        port_scanner_mock.scan.return_value = self._nmap_scan_result
+
         host = '127.0.0.1'
 
         scan_result = scan_ports_with_nmap(host)
 
-        scan.assert_called_once_with(host)
+        port_scanner_mock.scan.assert_called_once_with(host)
         self.assertEqual(
             'open',
             scan_result['scan']['127.0.0.1']['tcp'][631]['state']

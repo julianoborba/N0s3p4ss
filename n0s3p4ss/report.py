@@ -1,10 +1,10 @@
 from marshmallow import Schema
-from marshmallow.fields import Str, Int, List, Bool, Date, Nested
+from marshmallow.fields import Str, Int, List, Bool, Nested
 
 
 class CertificateInformationsSchema(Schema):
     issuer = Str()
-    expiration = Date()
+    expiration = Str()
 
 
 class ReportSchema(Schema):
@@ -14,7 +14,7 @@ class ReportSchema(Schema):
     status = Int()
     cert_info = Nested(CertificateInformationsSchema())
     server = Str()
-    tor = Bool()
-    waf = List(Str())
+    tor_reachable = Bool()
+    detected_waf = List(Str())
     open_ports = List(Int())
     alerts = List(Str())

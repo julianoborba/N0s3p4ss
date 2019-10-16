@@ -1,7 +1,7 @@
 {
   "url": "https://account-api.grupozap.com/",
-  "tor": false,
-  "wafestruz": [
+  "tor_reachable": false,
+  "detected_wafestruz": [
     "Cloudflare (Cloudflare Inc.)"
   ],
   "alerts": [

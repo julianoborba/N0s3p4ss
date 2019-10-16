@@ -1,8 +1,10 @@
 from unittest import TestCase
-from n0s3p4ss.header_validator import is_amazon_s3, \
-    compare_nginx_version, is_cookie_http_only_defined, \
-    is_x_xss_protection_mode_block, is_cookie_path_denifed_as_slash, \
-    is_ac_allow_origin_with_sameorigin
+from n0s3p4ss.header_validator import is_access_control_allow_origin_sameorigin
+from n0s3p4ss.header_validator import is_cookie_path_slash
+from n0s3p4ss.header_validator import is_cookie_http_only_present
+from n0s3p4ss.header_validator import is_x_xss_protection_mode_block
+from n0s3p4ss.header_validator import is_amazon_s3
+from n0s3p4ss.header_validator import is_nginx_an_older_version
 
 
 class HeaderValidatorTest(TestCase):
@@ -26,81 +28,60 @@ class HeaderValidatorTest(TestCase):
         nginx_version = '1.16.1'
         server_header = 'nginx/1.16.1'
 
-        self.assertEqual('The server Nginx version is the same '
-                         'as the expected Nginx version; '
-                         'The expected version is 1.16.1',
-                         compare_nginx_version(server_header, nginx_version))
+        self.assertEqual(
+            False, is_nginx_an_older_version(server_header, nginx_version))
 
-    def test_that_should_not_compare_nginx_versions_as_the_same(self):
+    def test_that_should_not_compare_nginx_versions_as_lesser(self):
         nginx_version = '1.16.1'
         server_header = 'nginx/1.14.1'
 
-        self.assertEqual('The server Nginx version is lesser than '
-                         'Nginx expected version; '
-                         'The expected version is 1.16.1',
-                         compare_nginx_version(server_header, nginx_version))
+        self.assertEqual(
+            True, is_nginx_an_older_version(server_header, nginx_version))
 
-    def test_that_should_recoginize_sameorigin_from_allow_origin(self):
+    def test_that_should_confirm_sameorigin_value(self):
         allow_origin = {'Access-Control-Allow-Origin': 'SAMEORIGIN'}
-        self.assertEqual('"Allow-origin" present with value: SAMEORIGIN',
-                         is_ac_allow_origin_with_sameorigin(
-                             allow_origin
-                             )
-                         )
 
-    def test_that_should_not_recoginize_sameorigin_from_allow_origin(self):
+        self.assertEqual(
+            True, is_access_control_allow_origin_sameorigin(allow_origin))
+
+    def test_that_should_not_confirm_sameorigin_value(self):
         allow_origin = {'Access-Control-Allow-Origin': 'DENY'}
-        self.assertEqual('"Allow-origin" present with value: DENY',
-                         is_ac_allow_origin_with_sameorigin(
-                             allow_origin
-                             )
-                         )
 
-    def test_that_should_return_null_from_allow_origin(self):
-        allow_origin = {'Access-Control-Allow-Origin': None}
-        self.assertEquals(
-            '',
-            is_ac_allow_origin_with_sameorigin(allow_origin)
-            )
+        self.assertEqual(
+            False, is_access_control_allow_origin_sameorigin(allow_origin))
 
-    def test_that_should_not_recognize_mode_block_in_x_xss_protection(self):
+    def test_that_should_not_confirm_mode_block_value(self):
         x_xss_protection = {'X-XSS-Protection': 'report=reporting-uri'}
-        self.assertEqual('"X-XSS-protection" is not set as "mode=block"',
-                         is_x_xss_protection_mode_block(x_xss_protection))
 
-    def test_that_should_recognize_mode_block_in_x_xss_protection(self):
+        self.assertEqual(
+            False, is_x_xss_protection_mode_block(x_xss_protection))
+
+    def test_that_should_confirm_mode_block_value(self):
         x_xss_protection = {'X-XSS-Protection': 'mode=block'}
-        self.assertEqual('"X-XSS-protection" is set as "mode=block"',
-                         is_x_xss_protection_mode_block(x_xss_protection))
 
-    def test_that_should_return_null_from_x_xss_protection(self):
-        x_xss_protection = {'X-XSS-Protection': None}
-        self.assertEquals('', is_x_xss_protection_mode_block(x_xss_protection))
+        self.assertEqual(
+            True, is_x_xss_protection_mode_block(x_xss_protection))
 
-    def test_that_should_recognize_path_in_set_cookie_path(self):
+    def test_that_should_confirm_path_with_slash_value(self):
         set_cookie = {'Set-Cookie': 'path=/'}
-        self.assertEqual('"Path" defined as "/"',
-                         is_cookie_path_denifed_as_slash(set_cookie))
 
-    def test_that_should_not_recognize_path_in_set_cookie_path(self):
+        self.assertEqual(
+            True, is_cookie_path_slash(set_cookie))
+
+    def test_that_should_not_confirm_path_with_slash_value(self):
         set_cookie = {'Set-Cookie': 'Secure'}
-        self.assertEqual('"Path" not defined as "/"',
-                         is_cookie_path_denifed_as_slash(set_cookie))
 
-    def test_that_should_return_null_from_set_cookie_path(self):
-        set_cookie = {'Set-Cookie': None}
-        self.assertEquals('', is_cookie_path_denifed_as_slash(set_cookie))
+        self.assertEqual(
+            False, is_cookie_path_slash(set_cookie))
 
-    def test_that_should_recognize_path_in_set_cookie_http_only(self):
+    def test_that_should_confirm_httponly_value(self):
         set_cookie = {'Set-Cookie': 'HttpOnly'}
-        self.assertEqual('"HttpOnly" is present',
-                         is_cookie_http_only_defined(set_cookie))
 
-    def test_that_should_not_recognize_path_in_set_cookie_http_only(self):
+        self.assertEqual(
+            True, is_cookie_http_only_present(set_cookie))
+
+    def test_that_should_not_confirm_httponly_value(self):
         set_cookie = {'Set-Cookie': 'Secure'}
-        self.assertEqual('"HttpOnly" is not present',
-                         is_cookie_http_only_defined(set_cookie))
 
-    def test_that_should_return_null_from_set_cookie_http_only(self):
-        set_cookie = {'Set-Cookie': None}
-        self.assertEquals('', is_cookie_http_only_defined(set_cookie))
+        self.assertEqual(
+            False, is_cookie_http_only_present(set_cookie))
