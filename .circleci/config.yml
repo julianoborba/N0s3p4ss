@@ -52,7 +52,7 @@ jobs:
             - n0s3p4ss-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Sonarqube
-          command: make sonar_analysis PROJECT_VERSION=$(git rev-parse --short HEAD)
+          command: make sonar_analysis PROJECT_VERSION=$(git rev-parse --short HEAD) SONAR_LOGIN=$SONAR_LOGIN
 
 workflows:
   version: 2
