@@ -20,6 +20,5 @@ coverage:
 
 .PHONY: sonar_analysis
 sonar_analysis:
-	sed -e 's/PROJECT_VERSION/${PROJECT_VERSION}/' < sonar-project.template.properties > sonar-project.properties
-	sed -e 's/SONAR_LOGIN/${SONAR_LOGIN}/' < sonar-project.template.properties > sonar-project.properties
+	sed -e "s/PROJECT_VERSION/${PROJECT_VERSION}/; s/SONAR_LOGIN/${SONAR_LOGIN}/;" < sonar-project.template.properties > sonar-project.properties
 	docker run -ti -v $(shell pwd):/usr/src vivareal/sonar-scanner:latest
