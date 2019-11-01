@@ -24,6 +24,12 @@ N0s3p4ss is an automated audition tool for Internet facing services. It gives vi
 
 <a name="pipenv"></a>**Install Dependecies**  
 
+You need to have a [**TOR Browser Bundle**](https://www.torproject.org/) instance running in order to enable N0s3p4ss TOR accessibility verification.
+
+Also you need [**nmap**](https://nmap.org/) already installed.
+
+You may need to customize the proxy server IP address at n0s3p4ss/config.py.
+
 To install dependencies, run: 
 ```bash
 make install
@@ -37,12 +43,6 @@ make clean
 ```
 
 ## <a name="usage"></a>Usage
-
-You need to have a TOR Browser Bundle instance running in order to enable N0s3p4ss TOR accessibility verification.
-
-Also you need nmap already installed.
-
-You may need to customize the proxy server IP address at n0s3p4ss/config.py.
 
 N0s3p4ss audition can be executed through [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
 ```bash
