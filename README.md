@@ -77,4 +77,12 @@ Each test can be executed through [unittest](https://docs.python.org/3/library/u
 make test
 ```
 
+Disclaimer
+---------
+
+>It may be illegal to use this script depending of the intentions of the user. The contributors of that repository, the organization that hold it, discourage illegal practices and are not associate with any present or future illegal action.
+
+>This software is intended to help auditors find vulnerabilities in their information technology infrastructure, so those can be fixed early, before an legit attacker exploit it.
+
+>All said, use of this script is at your own risk. Use with caution.
 
