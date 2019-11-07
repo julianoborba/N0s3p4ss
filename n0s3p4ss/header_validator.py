@@ -10,8 +10,8 @@ def is_amazon_s3(server_header):
 def is_nginx_an_older_version(server_header, expected_version):
     header_parts = server_header.split('nginx/') if server_header else []
     return len(header_parts) >= 2 and (
-            version.parse(header_parts[1]) <
-            version.parse(expected_version)
+        version.parse(header_parts[1]) <
+        version.parse(expected_version)
     )
 
 

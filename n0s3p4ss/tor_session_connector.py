@@ -1,6 +1,8 @@
 from n0s3p4ss.config import config
+from n0s3p4ss.custom_json_logger import custom_logger
 
 CONFIG = config()
+IS_ENABLED = True
 
 
 class TorSession:
@@ -14,12 +16,19 @@ class TorSession:
         self._tor_session.proxies = CONFIG.TOR_SESSION_PROXIES
 
     def get(self, url, timeout):
-        return self._tor_session.get(
-            f'http://{url}',
-            headers=self._user_agent,
-            verify=False,
-            timeout=timeout
-        )
+        try:
+            return self._tor_session.get(
+                f'http://{url}',
+                headers=self._user_agent,
+                verify=False,
+                timeout=timeout
+            )
+        except ConnectionError as connection_error:
+            custom_logger.error(
+                f'ConnectionError for {url}, cause {connection_error}',
+                exc_info=IS_ENABLED
+            )
+        return None
 
     def close(self):
         self._tor_session.close()

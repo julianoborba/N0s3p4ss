@@ -44,6 +44,14 @@ class TorSessionConnectorTest(TestCase):
             )
             self.assertEqual(200, response.status_code)
 
+    @patch.object(Session, 'get', side_effect=ConnectionError)
+    def test_that_should_get_connection_error(self, get):
+        with Session() as session:
+            tor_connection = TorSession(session, USER_AGENT)
+            response = tor_connection.get('www.google.com', 40)
+
+            self.assertIsNone(response)
+
     @patch.object(Session, 'close')
     def test_that_should_close_tor_session(self, close):
         with Session() as session:
