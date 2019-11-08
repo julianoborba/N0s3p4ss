@@ -1,6 +1,6 @@
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/grupozap/N0s3p4ss.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/grupozap/N0s3p4ss/context:python) [![Total alerts](https://img.shields.io/lgtm/alerts/g/grupozap/N0s3p4ss.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/grupozap/N0s3p4ss/alerts/)
 
-# N0s3p4ss
+# N0s3p4ss [![CircleCI](https://circleci.com/gh/grupozap/N0s3p4ss.svg?style=svg)](https://circleci.com/gh/grupozap/N0s3p4ss)
 
 N0s3p4ss is an automated audition tool for Internet facing services. It gives visibility for the following informations:
 ```bash
