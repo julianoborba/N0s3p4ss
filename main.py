@@ -7,7 +7,7 @@ IS_ENABLED = 1
 
 if __name__ == '__main__':
     argument_parser = ArgumentParser(
-        usage='pipenv run python3 main.py --domains [target_domains]'
+        usage='pipenv run python3 main.py --domains "domain_1 domain_2 ..."'
     )
 
     required_arguments = argument_parser.add_argument_group(
@@ -15,11 +15,9 @@ if __name__ == '__main__':
     )
     required_arguments.add_argument(
         '--domains',
-        metavar='target_domains',
         type=str,
         required=True,
-        help='Domains to be analysed',
-        nargs='+'
+        help='Domains to be analysed'
     )
 
     target_domains = argument_parser.parse_args().domains.split(" ")

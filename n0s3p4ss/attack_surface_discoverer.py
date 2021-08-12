@@ -34,6 +34,7 @@ class HostAttackSurface:
 
 
 def discover(domain):
+    custom_logger.info(f'analyzing the following domain: {domain}')
     response = do_get(domain)
     server = response.headers.get('Server', '')
     url = response.url if response.url else ''

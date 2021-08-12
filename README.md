@@ -46,7 +46,7 @@ make clean
 
 N0s3p4ss audition can be executed through [pipenv](https://pipenv-fork.readthedocs.io/en/latest/), run:
 ```bash
-pipenv run python3 main.py --domains 'target_domains'
+pipenv run python3 main.py --domains "vivareal.com.br zapimoveis.com.br"
 ```
 
 For additional help, run:
