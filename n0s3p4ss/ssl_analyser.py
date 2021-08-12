@@ -1,4 +1,4 @@
-from OpenSSL.SSL import Context, SSLv23_METHOD, VERIFY_NONE, Connection
+from OpenSSL.SSL import Context, TLSv1_2_METHOD, VERIFY_NONE, Connection
 from idna import encode
 from n0s3p4ss.custom_json_logger import custom_logger
 from cryptography.x509.oid import NameOID
@@ -46,8 +46,8 @@ class SSLSocket:
         self.close()
 
 
-def get_sslv23_method_context():
-    context = Context(SSLv23_METHOD)
+def get_tls_method_context():
+    context = Context(TLSv1_2_METHOD)
     context.check_hostname = False
     context.verify_mode = VERIFY_NONE
     return context

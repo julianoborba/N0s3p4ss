@@ -1,12 +1,12 @@
-from wafw00f.main import WafW00F
+from wafw00f.main import WAFW00F
 from n0s3p4ss.config import config
 
 CONFIG = config()
 
 
 def detect(url):
-    wafw00f = WafW00F(
+    wafW00f = WAFW00F(
         target=url,
-        proxy=CONFIG.WAFW00F_PROXY
+        proxies=CONFIG.HTTP_SESSION_PROXIES
     )
     return wafw00f.identwaf(True)

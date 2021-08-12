@@ -22,7 +22,7 @@ if __name__ == '__main__':
         nargs='+'
     )
 
-    target_domains = argument_parser.parse_args().domains
+    target_domains = argument_parser.parse_args().domains.split(" ")
 
     output_logger.info(
         dumps(sniff(target_domains), indent=IS_ENABLED)

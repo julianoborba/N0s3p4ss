@@ -13,10 +13,9 @@ class Config(object):
                       'Safari/537.36'
     }
     HTTP_SESSION_PROXIES = {
-        'http': 'http://10.154.11.143:8888',
-        'https': 'http://10.154.11.143:8888'
+        'http': os.getenv('PROXY', ''),
+        'https': os.getenv('PROXY', '')
     }
-    WAFW00F_PROXY = 'http://10.154.11.143:8888'
     NGINX_SAFE_VERSION = '1.16.1'
     TOR_SESSION_PROXIES = {
         'http': 'socks5://127.0.0.1:9150',

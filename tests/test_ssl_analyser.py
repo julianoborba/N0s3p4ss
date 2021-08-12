@@ -8,7 +8,7 @@ from socketserver import TCPServer, ThreadingMixIn, StreamRequestHandler
 from ssl import wrap_socket
 from os.path import abspath, dirname
 from n0s3p4ss.ssl_analyser import SSLSocket, \
-    get_sslv23_method_context, \
+    get_tls_method_context, \
     get_ssl_connection, \
     get_peer_certificate, \
     get_cryptography_certificate, \
@@ -84,8 +84,8 @@ class SslAnalyserTest(TestCase):
 
             self.assertTrue(ssl_socket.get_socket()._closed)
 
-    def test_that_should_get_sslv23_method_context(self):
-        context = get_sslv23_method_context()
+    def test_that_should_get_tls_method_context(self):
+        context = get_tls_method_context()
 
         self.assertIsNotNone(context)
         self.assertFalse(context.check_hostname)
@@ -94,7 +94,7 @@ class SslAnalyserTest(TestCase):
     def test_that_should_get_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
             ssl_socket.connect()
-            context = get_sslv23_method_context()
+            context = get_tls_method_context()
 
             ssl_connection = get_ssl_connection(context,
                                                 ssl_socket.get_domain(),
@@ -106,7 +106,7 @@ class SslAnalyserTest(TestCase):
     def test_that_should_get_cert_issuer_from_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
             ssl_socket.connect()
-            context = get_sslv23_method_context()
+            context = get_tls_method_context()
             ssl_connection = get_ssl_connection(context,
                                                 ssl_socket.get_domain(),
                                                 ssl_socket.get_socket())
@@ -141,7 +141,7 @@ class SslAnalyserTest(TestCase):
     def test_that_should_get_cert_expiration_from_ssl_connection(self):
         with self.get_ssl_socket() as ssl_socket:
             ssl_socket.connect()
-            context = get_sslv23_method_context()
+            context = get_tls_method_context()
             ssl_connection = get_ssl_connection(context,
                                                 ssl_socket.get_domain(),
                                                 ssl_socket.get_socket())

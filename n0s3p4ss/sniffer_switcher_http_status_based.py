@@ -11,7 +11,7 @@ from n0s3p4ss.sec_headers_obtainer import retrieve_strict_transport_security
 from n0s3p4ss.sec_headers_obtainer import retrieve_content_security_policy
 from n0s3p4ss.sec_headers_obtainer import retrieve_x_content_type_options
 from n0s3p4ss.ssl_analyser import SSLSocket
-from n0s3p4ss.ssl_analyser import get_sslv23_method_context
+from n0s3p4ss.ssl_analyser import get_tls_method_context
 from n0s3p4ss.ssl_analyser import get_ssl_connection
 from n0s3p4ss.ssl_analyser import get_peer_certificate
 from n0s3p4ss.ssl_analyser import get_cryptography_certificate
@@ -135,7 +135,7 @@ class WebServerBannerGrabber:
                 domain, 443, socket(AF_INET, SOCK_STREAM)
         ) as ssl_socket:
             ssl_socket.connect()
-            context = get_sslv23_method_context()
+            context = get_tls_method_context()
             ssl_connection = get_ssl_connection(
                 context,
                 ssl_socket.get_domain(),

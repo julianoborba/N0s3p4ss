@@ -12,8 +12,8 @@ HTTP_SESSION_HEADERS = {
                   'Safari/537.36'
 }
 HTTP_SESSION_PROXIES = {
-    'http': 'http://10.154.11.143:8888',
-    'https': 'http://10.154.11.143:8888'
+    'http': '',
+    'https': ''
 }
 
 

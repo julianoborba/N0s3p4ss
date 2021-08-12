@@ -30,7 +30,7 @@ You need to have a [**TOR Browser Bundle**](https://www.torproject.org/) instanc
 
 Also you need [**nmap**](https://nmap.org/) already installed.
 
-You may need to customize the proxy server IP address at n0s3p4ss/config.py.
+Customize the proxy server IP address at n0s3p4ss/config.py.
 
 To install dependencies, run: 
 ```bash

@@ -16,6 +16,14 @@ def get_ports_only_from_nmap_scan(scan, host):
             exc_info=IS_ENABLED
         )
         return {}
+
+    if not scan['scan'][host].get('tcp'):
+        custom_logger.error(
+            f'no tcp info found',
+            exc_info=IS_ENABLED
+        )
+        return {}
+
     ports = (scan['scan'][host]['tcp']).copy()
     for port, attributes in ports.items():
         ports.update({port: attributes['state']})

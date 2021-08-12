@@ -1,12 +1,12 @@
 from unittest import TestCase
 from unittest.mock import patch
 from n0s3p4ss.waf_detector import detect
-from wafw00f.main import WafW00F
+from wafw00f.main import WAFW00F
 
 
 class WAFDetectorTest(TestCase):
 
-    @patch.object(WafW00F, 'identwaf')
+    @patch.object(WAFW00F, 'identwaf')
     def test_that_should_detect_waf(self, identwaf):
         identwaf.return_value = ['Cloudflare (Cloudflare Inc.)']
 
