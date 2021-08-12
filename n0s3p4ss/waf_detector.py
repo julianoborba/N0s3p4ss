@@ -7,6 +7,6 @@ CONFIG = config()
 def detect(url):
     wafw00f = WafW00F(
         target=url,
-        proxies=CONFIG.HTTP_SESSION_PROXIES
+        proxy=CONFIG.HTTP_SESSION_PROXIES
     )
     return wafw00f.identwaf(True)
